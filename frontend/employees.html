@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Employees — ProU Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="#ff6f97"/>
+          <path d="M7 12h10M12 7v10" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">ProU Management</div>
+        <div class="brand-sub">Simplify employee &amp; task management</div>
+      </div>
+    </div>
+
+    <nav class="top-nav" role="navigation" aria-label="Main">
+      <a href="dashboard.html" class="nav-link">Home</a>
+      <a href="employees.html" class="nav-link active">Employees</a>
+      <a href="tasks.html" class="nav-link">Tasks</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+    </nav>
+
+  
+    </div>
+  </header>
+
+  <!-- Employees Topbar -->
+  <section class="page-topbar">
+    <div class="top-left">
+      <div class="breadcrumb">Home › Employees</div>
+      <h1 class="page-title-compact">Employees</h1>
+      <p class="page-sub">Manage staff, roles and contact details</p>
+    </div>
+
+    <div class="top-right">
+      <div class="search-wrap">
+        <input id="empSearch" placeholder="Search employees..." />
+        <button id="clearSearch" title="Clear">✕</button>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat">
+          <div class="snum" id="quickEmpCount">0</div>
+          <div class="slabel">Employees</div>
+        </div>
+        <div class="stat">
+          <div class="snum" id="quickTaskCount">0</div>
+          <div class="slabel">Tasks</div>
+        </div>
+      </div>
+
+      <div class="actions-top">
+        <button id="exportBtn" class="btn-ghost">Export</button>
+        <button id="newEmpBtn" class="btn">New Employee</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main layout (keeps consistent with page) -->
+  <div class="layout">
+
+    <main class="main-content">
+
+      <!-- Add / Edit Employee (neat grid) -->
+      <section class="grid-two">
+        <div class="card card-form">
+          <h3>Add / Edit Employee</h3>
+
+         <!-- ===== Employees form + list (replace your existing employee block with this) ===== -->
+<div class="grid-two" style="align-items:flex-start; gap:36px;">
+
+  <!-- Left: Add / Edit Employee -->
+  <div class="card card-form" style="padding:28px;">
+    <h3 style="margin-top:0;">Add / Edit Employee</h3>
+
+    <form id="empForm" autocomplete="off">
+      <div class="form-grid">
+        <label>
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Name</div>
+          <input id="empName" class="in" placeholder="Name" required />
+        </label>
+
+        <label>
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Email</div>
+          <input id="empEmail" class="in" placeholder="Email" type="email" required />
+        </label>
+
+        <label>
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Phone</div>
+          <input id="empPhone" class="in" placeholder="Phone" />
+        </label>
+
+        <label>
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Role</div>
+          <input id="empRole" class="in" placeholder="Role (e.g. Engineer)" />
+        </label>
+
+        <label class="full">
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Position</div>
+          <input id="empPosition" class="in" placeholder="Position (e.g. Senior)" />
+        </label>
+
+        <label class="full">
+          <div style="font-weight:600; color:#6d3a4f; margin-bottom:6px">Notes (optional)</div>
+          <input id="empNotes" class="in" placeholder="Short note or team" />
+        </label>
+      </div>
+
+      <div class="actions" style="margin-top:18px;">
+        <button class="btn" type="submit">Add Employee</button>
+        <button class="btn-ghost" type="reset">Reset</button>
+      </div>
+      <p id="empMsg" style="color:#d00050; margin-top:10px;"></p>
+    </form>
+  </div>
+
+  <!-- Right: Employee List -->
+  <div>
+    <div id="empListCard" class="card" style="padding:24px; min-height:160px;">
+      <h3 style="margin-top:0;">Employee List</h3>
+      <div id="empList" style="margin-top:10px; color:#6b3a4d; opacity:0.95;">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Employees front-end script
+   - requires backend at http://localhost:5000
+   - requires a valid token stored at localStorage.getItem('token')
+*/
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+const empListEl = document.getElementById("empList");
+const empMsg = document.getElementById("empMsg");
+
+// helper to build auth headers
+function authHeaders() {
+  const h = { "Content-Type": "application/json" };
+  if (token) h["Authorization"] = "Bearer " + token;
+  return h;
+}
+
+// render list rows
+function renderEmployees(rows){
+  if(!rows || rows.length === 0){
+    empListEl.innerHTML = '<div style="padding:12px 6px; color:#3b1e25;">No employees yet</div>';
+    return;
+  }
+  const html = rows.map(r => `
+    <div class="list-item" style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-weight:700">${escapeHtml(r.name || '')}</div>
+        <small>${escapeHtml(r.email || '')} ${r.phone? ' • ' + escapeHtml(r.phone):''}</small>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn-ghost" onclick="startEdit(${r.id})">Edit</button>
+        <button class="del" onclick="deleteEmployee(${r.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  empListEl.innerHTML = html;
+}
+
+// simple escape
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// fetch employees (GET)
+async function refreshEmployees(){
+  empMsg.textContent = "";
+  empListEl.textContent = "Loading...";
+  try {
+    const res = await fetch(API + "/employees", { headers: authHeaders() });
+    if(res.status === 401 || res.status === 403){
+      empListEl.innerHTML = '<div style="color:#d00050;">Unauthorized — please login again.</div>';
+      return;
+    }
+    if(!res.ok){
+      const t = await res.text();
+      empListEl.innerHTML = `<div style="color:#d00050;">Error loading: ${escapeHtml(t)}</div>`;
+      return;
+    }
+    const rows = await res.json();
+    renderEmployees(rows);
+  } catch(err){
+    empListEl.innerHTML = '<div style="color:#d00050;">Network error — check server</div>';
+    console.error("refreshEmployees error:", err);
+  }
+}
+
+// Add employee (POST)
+document.getElementById('empForm').addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
+  empMsg.textContent = "";
+  const payload = {
+    name: document.getElementById('empName').value.trim(),
+    email: document.getElementById('empEmail').value.trim(),
+    phone: document.getElementById('empPhone').value.trim(),
+    role: document.getElementById('empRole').value.trim(),
+    position: document.getElementById('empPosition').value.trim(),
+    notes: document.getElementById('empNotes').value.trim()
+  };
+  if(!payload.name || !payload.email){
+    empMsg.textContent = "Name and email are required.";
+    return;
+  }
+
+  try {
+    const res = await fetch(API + "/employees", {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify(payload)
+    });
+
+    // server may respond with JSON or text
+    const txt = await res.text();
+    let body;
+    try { body = JSON.parse(txt); } catch(e){ body = txt; }
+
+    if(res.status === 401 || res.status === 403){
+      empMsg.textContent = "Unauthorized — you need to sign in.";
+      return;
+    }
+    if(!res.ok){
+      empMsg.textContent = "Add failed: " + (body && body.error ? body.error : txt);
+      return;
+    }
+
+    // success
+    alert("Employee added!");
+    ev.target.reset();
+    refreshEmployees();
+  } catch(err){
+    empMsg.textContent = "Network error — check server.";
+    console.error("add employee error:", err);
+  }
+});
+
+// delete employee
+async function deleteEmployee(id){
+  if(!confirm("Delete this employee?")) return;
+  try {
+    const res = await fetch(API + "/employees/" + id, {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+    if(!res.ok){
+      const t = await res.text();
+      alert("Delete failed: " + t);
+      return;
+    }
+    refreshEmployees();
+  } catch(e){
+    alert("Network error — check server");
+  }
+}
+
+// edit helper: loads employee data into form for editing (optional)
+function startEdit(id){
+  // simple approach: fetch list rows and find entry
+  // or fetch single endpoint if you implement it server-side
+  fetch(API + "/employees", { headers: authHeaders() })
+    .then(r => r.json())
+    .then(rows => {
+      const item = rows.find(x => x.id === id);
+      if(!item){ alert("Not found"); return; }
+      document.getElementById('empName').value = item.name || '';
+      document.getElementById('empEmail').value = item.email || '';
+      document.getElementById('empPhone').value = item.phone || '';
+      document.getElementById('empRole').value = item.role || '';
+      document.getElementById('empPosition').value = item.position || '';
+      document.getElementById('empNotes').value = item.notes || '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(()=> alert("Unable to load record"));
+}
+
+// initial load
+refreshEmployees();
+</script>
+
+        <!-- Employee list -->
+      
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast"></div>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+/* =================== Global / Base =================== */
+:root{
+  --bg-pink: #ffe6f2;
+  --left-pink: #fbd2e8;
+  --accent: #d9006c;
+  --accent-2: #ff2d72;
+  --muted: #7a0040;
+  --card-bg: #fff;
+  --input-bg: #eef4ff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-pink);
+  color: #111;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =================== Header / Top nav =================== */
+.top-header {
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:14px 28px;
+  background: linear-gradient(90deg,#fff7fb,#ffeef7);
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.brand { display:flex; gap:12px; align-items:center; min-width:250px; }
+.mark { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#ff86b5,#ff4fa1); box-shadow:0 6px 16px rgba(255,79,122,0.12); }
+.brand-title { font-weight:700; color: var(--accent); font-size:18px; }
+.brand-sub { font-size:12px; color:var(--muted); margin-top:2px; opacity:0.9; }
+.top-nav { display:flex; gap:8px; align-items:center; }
+.top-nav .nav-link {
+  padding:8px 14px; border-radius:999px; text-decoration:none; color:#8b2a53; font-weight:600;
+  transition: all .18s;
+}
+.top-nav .nav-link:hover { transform:translateY(-2px); background: rgba(255,111,153,0.06); box-shadow:0 8px 20px rgba(217,0,108,0.06); }
+.top-nav .nav-link.active { color: #fff; background: linear-gradient(90deg,#ff679d,#ff2d72); box-shadow:0 10px 22px rgba(255,45,114,0.12); }
+.top-actions { margin-left:auto; display:flex; gap:12px; align-items:center; }
+.toggle-btn { border:1px solid rgba(0,0,0,0.06); background: #fff; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.user-chip { display:flex; gap:10px; align-items:center; padding:6px 10px; border-radius:12px; background: rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.03); color:#6b003c; }
+.avatar { width:34px;height:34px;border-radius:8px;background:linear-gradient(180deg,#ff6f97,#ff2d72);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700; }
+
+/* =================== Page topbar =================== */
+.page-topbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:18px 40px;
+  background: transparent;
+  margin-bottom: 8px;
+}
+.top-left { flex:1; }
+.breadcrumb { font-size:13px; color:#904058; opacity:0.8; margin-bottom:4px; }
+.page-title-compact { font-size:28px; margin:0; color:#2b0b1b; }
+.page-sub { margin-top:6px; color:#6b3a4d; opacity:0.9; }
+
+/* search / quick stats / actions */
+.top-right { display:flex; align-items:center; gap:12px; }
+.search-wrap { display:flex; align-items:center; gap:8px; background:#fff; padding:6px; border-radius:10px; box-shadow:0 6px 14px rgba(0,0,0,0.04); border:1px solid rgba(0,0,0,0.04); }
+.search-wrap input { border:none; outline:none; padding:8px; width:220px; font-size:14px; }
+.search-wrap button { border:none; background:transparent; cursor:pointer; font-size:14px; color:#c33; padding:6px; }
+
+.quick-stats { display:flex; gap:10px; align-items:center; }
+.quick-stats .stat { background:#fff; padding:10px 14px; border-radius:10px; text-align:center; box-shadow:0 6px 14px rgba(0,0,0,0.04); }
+.snum { font-weight:700; font-size:18px; color:var(--accent); }
+.slabel { font-size:12px; color:#6b3a4d; opacity:0.9; margin-top:4px; }
+
+.actions-top .btn-ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); padding:8px 12px; border-radius:8px; cursor:pointer; }
+.actions-top .btn { background: linear-gradient(90deg,#ff679d,#ff2d72); color:#fff; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; }
+
+/* =================== Layout =================== */
+.layout { padding: 0 24px 40px 24px; }
+.main-content { max-width: 1200px; margin: 0 auto; padding-top: 8px; }
+
+/* grid two */
+.grid-two { display:grid; grid-template-columns: 1fr 1fr; gap:20px; align-items:start; }
+
+/* =================== Card / Form styles =================== */
+.card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.card-form { padding: 22px 24px; }
+
+/* form grid: 2 columns on wide screens, 1 column on small screens */
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 14px; }
+.form-grid .full { grid-column: 1 / -1; }
+
+/* labelled field style */
+.field label { display: block; font-size: 13px; margin-bottom: 6px; color: #6d3a4f; font-weight: 600; }
+
+/* inputs refined */
+.in { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.06); background: #f1f7ff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); transition: box-shadow .12s, transform .08s; }
+.in:focus { outline: none; box-shadow: 0 6px 20px rgba(216,71,126,0.08); transform: translateY(-1px); border-color:#ff6f97; }
+
+/* actions row */
+.actions { margin-top: 14px; display:flex; gap: 12px; }
+.actions .btn { flex: 1; padding: 12px 16px; font-weight: 700; border-radius: 10px; box-shadow: 0 6px 18px rgba(216,71,126,0.08); }
+.actions .btn-ghost { flex: 0 0 120px; background: transparent; border: 1px solid rgba(0,0,0,0.06); padding: 10px 12px; border-radius: 8px; }
+
+/* list item styles */
+#empList { margin-top: 6px; display:flex; flex-direction:column; gap:8px; }
+.list-item { padding: 12px; background: rgba(255,255,255,0.95); border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); display:flex; justify-content:space-between; align-items:center; }
+.list-item small { color: #6e3b4d; opacity:0.9; }
+
+/* buttons */
+.del { background:#ff4f4f; color:white; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.btn-ghost { background:none; border:1px solid #ddd; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.btn { background: linear-gradient(90deg,#ff679d,#ff2d72); color: #fff; border: none; padding: 10px 14px; border-radius:8px; cursor:pointer; font-weight:700; }
+
+/* toast */
+#toast { visibility:hidden; min-width:200px; background:#333; color:#fff; padding:12px 16px; border-radius:10px; position:fixed; bottom:30px; right:30px; opacity:0; transition:0.35s; z-index:200; }
+#toast.show { visibility:visible; opacity:1; }
+
+/* responsive */
+@media (max-width: 920px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .grid-two { grid-template-columns: 1fr; }
+  .search-wrap input { width: 140px; }
+  .page-topbar { padding: 12px 18px; flex-direction:column; align-items:flex-start; gap:10px; }
+}
+
+/* dark mode minimal */
+:root.dark .card {
+  background: #fff;
+  color: #111;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+:root.dark .in {
+  background: #eef4ff;
+  color: #111;
+  border-color: rgba(0,0,0,0.06);
+}
+
+
+
+
+
+
+
+/* ========== login page overrides ========== */
+.split-login { display:flex; gap:0; height: calc(100vh - 72px); align-items:stretch; }
+
+/* LEFT: big brand area */
+.split-login .left {
+  flex: 1;
+  padding-left: 7%;
+  display:flex;
+  align-items:center;
+}
+.split-login .brand-wrap { max-width: 720px; }
+.brand-title.fancy { font-size:78px; line-height:0.95; color: var(--accent-2); font-weight:900; margin:0; letter-spacing:0.6px; }
+
+/* RIGHT: auth card, pushed a little in from the right edge (so it sits visually left of the edge) */
+.split-login .right {
+  flex: 1;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;          /* push card toward left inside right column */
+  padding-left:56px;                    /* controls how far left the card appears */
+  padding-right:6%;
+}
+.auth-card { width:420px; border-radius:14px; padding:40px; box-shadow: 0 18px 36px rgba(217,0,108,0.08); }
+
+/* minor input/button size tweaks */
+.auth-card .in { padding:12px 14px; border-radius:10px; }
+.auth-card .btn { padding:12px 16px; border-radius:10px; font-weight:700; }
+
+/* responsive adjustments */
+@media (max-width: 980px) {
+  .brand-title.fancy { font-size:46px; }
+  .split-login { flex-direction:column; height:auto; padding-bottom:40px; }
+  .split-login .left { padding-left:18px; padding-top:28px; order:1; }
+  .split-login .right { padding:20px; order:2; justify-content:center; }
+  .auth-card { width:100%; max-width:420px; }
+}

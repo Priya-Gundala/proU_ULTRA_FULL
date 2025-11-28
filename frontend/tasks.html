@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tasks — ProU Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- Header (same as employees) -->
+  <header class="top-header">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="#ff6f97"/>
+          <path d="M7 12h10M12 7v10" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">ProU Management</div>
+        <div class="brand-sub">Simplify employee &amp; task management</div>
+      </div>
+    </div>
+
+    <nav class="top-nav" role="navigation" aria-label="Main">
+      <a href="dashboard.html" class="nav-link">Home</a>
+      <a href="employees.html" class="nav-link">Employees</a>
+      <a href="tasks.html" class="nav-link active">Tasks</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+    </nav>
+
+   
+    </div>
+  </header>
+
+  <!-- Tasks Topbar -->
+  <section class="page-topbar">
+    <div class="top-left">
+      <div class="breadcrumb">Home › Tasks</div>
+      <h1 class="page-title-compact">Tasks</h1>
+      <p class="page-sub">Create tasks, set due dates, status and assign to employees</p>
+    </div>
+
+    <div class="top-right">
+      <div class="search-wrap">
+        <input id="taskSearch" placeholder="Search tasks..." />
+        <button id="clearTaskSearch" title="Clear">✕</button>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat">
+          <div class="snum" id="quickOpenCount">0</div>
+          <div class="slabel">Open</div>
+        </div>
+        <div class="stat">
+          <div class="snum" id="quickDoneCount">0</div>
+          <div class="slabel">Done</div>
+        </div>
+      </div>
+
+      <div class="actions-top">
+        <button id="exportTasks" class="btn-ghost">Export</button>
+        <button id="newTaskBtn" class="btn">New Task</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main layout -->
+  <div class="layout">
+    <main class="main-content">
+
+      <section class="grid-two">
+        <!-- Task form -->
+        <div class="card card-form">
+          <h3>Add / Edit Task</h3>
+
+          <form id="taskForm" onsubmit="event.preventDefault(); saveTaskBtn.click();">
+            <input id="taskId" type="hidden"/>
+
+            <div class="form-grid">
+              <div class="field">
+                <label>Title</label>
+                <input id="taskTitle" class="in" placeholder="Task title"/>
+              </div>
+
+              <div class="field">
+                <label>Assigned To (employee id)</label>
+                <select id="taskAssigned" class="in">
+  <option value="">(none)</option>
+  <!-- add-task.js will populate more options -->
+</select>
+              </div>
+
+              <div class="field">
+                <label>Due Date</label>
+                <input id="taskDue" class="in" type="date"/>
+              </div>
+
+              <div class="field">
+                <label>Status</label>
+                <select id="taskStatus" class="in">
+                  <option value="open">Open</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="done">Done</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Color Tag</label>
+                <select id="taskColor" class="in">
+                  <option value="#ff8da1">Pink</option>
+                  <option value="#ffb86b">Orange</option>
+                  <option value="#7ed0ff">Blue</option>
+                  <option value="#b7f38b">Green</option>
+                  <option value="#c99bff">Purple</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label>Description</label>
+                <input id="taskDesc" class="in" placeholder="Short description"/>
+              </div>
+            </div>
+           
+
+
+            <div class="actions">
+              <button id="saveTaskBtn" class="btn" type="button">Save Task</button>
+              <button id="resetTaskBtn" class="btn-ghost" type="button">Reset</button>
+            </div>
+          </form>
+        </div>
+        
+
+
+        <!-- Task list -->
+        <div class="card">
+          <h3>Task List</h3>
+          <div id="taskList">Loading…</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="add-task.js"></script>
+<script src="tasks.js"></script>
+
+
+  <div id="toast"></div>
+  
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProU Management - Login</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #ffe6f2;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .split {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* LEFT SIDE */
+    .left {
+      flex: 1;
+      background: #ffe6f2;
+      padding-left: 100px;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand-wrap {
+      max-width: 550px;
+    }
+
+    .brand-title {
+      font-size: 70px;
+      font-weight: 800;
+      color: #d9006c;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 22px;
+      margin-top: 15px;
+      color: #7a0040;
+    }
+
+    /* RIGHT SIDE – light pink full area */
+    .right {
+      flex: 1;
+      background: #ffeaf4;          /* changed from white */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      border-left: 1px solid rgba(255, 0, 120, 0.08);
+    }
+
+    /* Login Area */
+    .auth-area {
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.4); /* subtle glass effect */
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #222;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+
+    .field .label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #6a2d4e;
+    }
+
+    .in {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      background: #eef4ff;
+      font-size: 15px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(90deg,#ff679d,#ff2d72);
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .msg {
+      margin-top: 15px;
+      color: #d00050;
+      font-size: 14px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="split">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+      <div class="brand-wrap">
+        <h1 class="brand-title">ProU<br>Management</h1>
+        <p class="brand-sub">Simplify employee & task management</p>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE (light pink background) -->
+    <aside class="right">
+      <div class="auth-area">
+
+        <h2>Login</h2>
+
+        <form id="loginForm" autocomplete="on">
+
+          <label class="field">
+            <span class="label">Email</span>
+            <input id="loginEmail" class="in" type="email" placeholder="you@example.com" required />
+          </label>
+
+          <label class="field">
+            <span class="label">Password</span>
+            <input id="loginPassword" class="in" type="password" placeholder="Password" required />
+          </label>
+
+          <label style="font-size:14px; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" /> Remember me
+          </label>
+
+          <div style="text-align:right; margin-top:-8px;">
+            <a href="register.html" style="color:#ff2d72; font-weight:600;">Register</a>
+          </div>
+
+          <button class="btn" type="submit">Sign in</button>
+        </form>
+
+        <p id="msg" class="msg"></p>
+
+      </div>
+    </aside>
+
+  </div>
+
+<!-- put near the bottom of index.html (replace previous script) -->
+<script>
+const API = "http://localhost:5000"; // adjust if different host/port
+
+// helper to show message under form (element with id="msg" must exist)
+function showMsg(text, color = '#d00050') {
+  const el = document.getElementById('msg');
+  if (el) { el.textContent = text; el.style.color = color; }
+  else console.log('MSG:', text);
+}
+
+// improved login handler
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showMsg("Signing in...", '#666');
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+
+  try {
+    const res = await fetch(API + "/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    // debug info: status + raw text for non-json errors
+    if (!res.ok) {
+      let text;
+      try { text = await res.text(); } catch (err) { text = 'No response text'; }
+      console.error('Login failed status', res.status, 'body:', text);
+      showMsg(`Sign-in failed: ${res.status} — ${text}`, '#b00020');
+      return;
+    }
+
+    // parse json and store token
+    const data = await res.json();
+    console.log('Login success response:', data);
+
+    if (data && data.token) {
+      localStorage.setItem('token', data.token);
+      if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+      showMsg('Signed in — redirecting...', '#007a32');
+      // short delay to show message then go
+      setTimeout(()=>{ window.location.href = "dashboard.html"; }, 450);
+    } else {
+      showMsg('Login response missing token', '#b00');
+      console.error('Missing token in login response:', data);
+    }
+  } catch (networkErr) {
+    // network error (server down or CORS)
+    console.error('Network error during login:', networkErr);
+    showMsg('Network error — check server (open DevTools Console)', '#b00020');
+  }
+});
+</script>
+
+
+</body>
+</html>

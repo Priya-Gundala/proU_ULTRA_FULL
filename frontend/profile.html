@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Profile — ProU Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* Small page-specific tweaks */
+    .profile-layout { max-width:1000px; margin: 18px auto; padding: 0 20px; }
+    .profile-card { display:flex; gap:24px; align-items:flex-start; padding:28px; border-radius:14px; box-shadow:0 8px 28px rgba(0,0,0,0.06); background:var(--card-bg); }
+    .avatar-col { width:220px; display:flex; flex-direction:column; gap:12px; align-items:center; }
+    .avatar-preview {
+      width:160px; height:160px; border-radius:18px; overflow:hidden; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(180deg,#ffc7df,#ff8da1); color:#fff; font-weight:700; font-size:40px; box-shadow:0 8px 24px rgba(255,45,114,0.08);
+    }
+    .avatar-preview img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .file-row { display:flex; gap:8px; align-items:center; width:100%; }
+    .file-row input[type="file"] { display:block; }
+    .hint { font-size:13px; color:#7a4; opacity:0.85; }
+    .profile-form { flex:1; }
+    .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .profile-grid .full { grid-column: 1 / -1; }
+    .save-row { margin-top:14px; display:flex; gap:12px; justify-content:flex-start; align-items:center; }
+    .small-muted { font-size:13px; color:#6b3a4d; opacity:0.85; margin-top:6px; }
+    @media (max-width:900px) {
+      .profile-card { flex-direction:column; align-items:stretch; }
+      .avatar-col { width:100%; flex-direction:row; justify-content:space-between; }
+      .avatar-preview { width:96px; height:96px; border-radius:12px; font-size:20px; }
+      .profile-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top header (same style as employees/tasks) -->
+<head>
+  ...
+  <script src="config.js"></script> <!-- ✅ Load API first -->
+  <script src="profile.js" defer></script> <!-- ✅ Load profile logic -->
+</head>
+
+
+
+  <main class="profile-layout">
+    <div class="breadcrumb" style="margin-bottom:6px; color:#904058; opacity:0.9;">Home › Profile</div>
+    <h1 style="margin:0 0 14px 0; font-size:36px; color:#2b0b1b;">Profile</h1>
+
+    <section class="profile-card">
+      <!-- Avatar column -->
+      <div class="avatar-col">
+        <div id="avatarPreview" class="avatar-preview" aria-hidden="true">P</div>
+        <div style="text-align:center;">
+          <div class="small-muted">Profile photo</div>
+          <div class="file-row">
+            <input id="avatarFile" type="file" accept="image/*">
+          </div>
+          <div class="small-muted" style="margin-top:8px;">Recommended: 400×400, JPG/PNG</div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="profile-form">
+        <div class="card" style="padding:20px;">
+          <h3 style="margin-top:0;">Your Profile</h3>
+
+          <form id="profileForm" onsubmit="event.preventDefault(); saveProfile();">
+            <div class="profile-grid">
+              <div class="field">
+                <label>Email</label>
+                <input id="profileEmail" class="in" type="email" placeholder="Email" required />
+              </div>
+
+              <div class="field">
+                <label>Name</label>
+                <input id="profileName" class="in" placeholder="Full name" />
+              </div>
+
+              <div class="field">
+                <label>Phone</label>
+                <input id="profilePhone" class="in" placeholder="Phone number" />
+              </div>
+
+              <div class="field">
+                <label>Role</label>
+                <input id="profileRole" class="in" placeholder="Role (e.g. Admin)" />
+              </div>
+
+              <div class="field full">
+                <label>Position</label>
+                <input id="profilePosition" class="in" placeholder="Position / Team" />
+              </div>
+            </div>
+
+            <div class="save-row">
+              <button id="saveProfileBtn" class="btn" type="submit">Save Changes</button>
+              <button id="cancelProfileBtn" class="btn-ghost" type="button">Cancel</button>
+              <div id="profileMsg" style="margin-left:12px;color:#b00020;"></div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

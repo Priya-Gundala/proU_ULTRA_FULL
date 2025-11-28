@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProU Management — Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">ProU</h2>
+
+    <nav>
+      <a href="dashboard.html" class="active">🏠 Dashboard</a>
+      <a href="employees.html">👥 Employees</a>
+      <a href="tasks.html">📝 Tasks</a>
+      <a href="profile.html">🙍‍♀️ Profile</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <h1>Dashboard</h1>
+      <div class="user">
+        <span id="userEmail"></span>
+      </div>
+    </header>
+
+    <!-- CARDS ROW -->
+    <section class="cards-grid">
+
+      <div class="card">
+        <h3>Total Employees</h3>
+        <p id="empCount" class="big-number">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Tasks</h3>
+        <p id="taskCount" class="big-number">0</p>
+      </div>
+
+      <div class="card wide">
+        <h3>Recent Activity</h3>
+        <ul id="activityList">
+          <li>No recent activity yet.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- CHART SECTION -->
+    <section class="chart-section">
+      <h2>Overview</h2>
+      <div class="chart-placeholder">
+        📊 Analytics coming soon…
+      </div>
+    </section>
+
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
